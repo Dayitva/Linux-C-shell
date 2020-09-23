@@ -10,7 +10,7 @@ void print_ls(char *path, bool printhidden)
 
     if(n < 0) 
     { 
-        perror("scandir");
+        perror("ls");
     }
         
     else 

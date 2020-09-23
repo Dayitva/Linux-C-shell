@@ -8,7 +8,7 @@
 
 int cmdhandle(char **parsed)
 {
-    if(!strcmp(parsed[0], "exit") || !strcmp(parsed[0], "quit"))
+    if(!strcmp(parsed[0], "quit"))
     {
         printf("You have exited the shell.\n");
         exit(0);

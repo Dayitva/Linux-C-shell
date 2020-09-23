@@ -19,12 +19,20 @@ int main(int argc, char *argv[])
     int flag = 0, stat_loc, args = 0, bg = 0;
     pid_t child_pid;
 
+    signal(SIGINT, SIG_IGN);
+
     while (1)
     {
         ask_prompt();
 
         input = getline(&str, &buffer, stdin);
         parsed = parse(str);
+
+        if(parsed[0] == NULL)
+        {
+            continue;
+        }
+
         flag = cmdhandle(parsed);
 
         while(parsed[args] != NULL)
@@ -32,11 +40,12 @@ int main(int argc, char *argv[])
             args++;
         }
 
-        // if(!strcmp(parsed[args-1], "&"))
-        // {
-        //     bg = 1;
-        //     processName = parsed[0];
-        // }
+        if(!strcmp(parsed[args-1], "&"))
+        {
+            bg = 1;
+            processName = parsed[0];
+            parsed[args-1] = NULL;
+        }
 
         if(flag == 1)
         {
@@ -55,6 +64,9 @@ int main(int argc, char *argv[])
 
             if (child_pid == 0) 
             {
+                //setpgid(0, 0);
+                signal(SIGINT, SIG_DFL);
+                
                 if(execvp(parsed[0], parsed) < 0)
                 {
                     printf("Command '%s' not found!\n", parsed[0]);
@@ -63,10 +75,18 @@ int main(int argc, char *argv[])
             
             else 
             {
-                waitpid(child_pid, &stat_loc, WUNTRACED);
+                if(bg == 0)
+                {
+                    waitpid(child_pid, &stat_loc, WUNTRACED);
+                }    
             }
         }
     }
+
+    free(str);
+    free(input);
+    free(processName);
+    exit(0);
 
     return 0;
 }

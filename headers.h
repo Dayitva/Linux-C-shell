@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <setjmp.h>
 #include <stdbool.h>
 
 #define COL_FG_BLK "\033[30;1m"
