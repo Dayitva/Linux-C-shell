@@ -3,7 +3,7 @@
 
 char **parse(char *input)
 {
-    int buffer = 64, i = 0;
+    int buffer = 32, i = 0;
     char **tokens = malloc(buffer * sizeof(char*));
     char *tokenised;
 
@@ -15,7 +15,7 @@ char **parse(char *input)
 
         if (i >= buffer) 
         {
-            buffer += 64;
+            buffer += 32;
             tokens = realloc(tokens, buffer * sizeof(char*));
         }
 
@@ -24,4 +24,21 @@ char **parse(char *input)
 
     tokens[i] = NULL;
     return tokens;
+}
+
+int parsePipe(char* input, char** strpiped) 
+{ 
+    int i; 
+    for (i = 0; i < 2; i++) 
+    { 
+        strpiped[i] = strsep(&input, "|"); 
+        if (strpiped[i] == NULL) 
+            break; 
+    } 
+  
+    if (strpiped[1] == NULL) 
+        return 0; // returns zero if no pipe is found. 
+    else { 
+        return 1; 
+    } 
 }

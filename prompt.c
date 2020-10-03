@@ -1,5 +1,8 @@
 #include "prompt.h"
 #include "headers.h"
+#include "sighandle.h"
+#include "main.h"
+#include "list.h"
     
 void init()
 {
@@ -12,6 +15,12 @@ void init()
 
     for(i = len; HOME[i] != '/'; i--);
     HOME[i] = 0;
+
+    procList = 0;
+
+    signal(SIGINT, ctrlC);
+    signal(SIGTSTP, ctrlZ);
+    signal(SIGCHLD, bgProcessExit);
 }
 
 char *tilda(char *cwd)

@@ -1,6 +1,6 @@
 #ifndef __ECHO_H
 #define __ECHO_H
 
-void echo(char **parsed);
+void echo(char **parsed, int args);
 
 #endif

@@ -1,8 +1,9 @@
 #include "cd.h"
 #include "prompt.h"
 #include "headers.h"
+#include "cwd.h"
 
-void cd(char **path)
+void cd(char **path, char * prev, bool prevset)
 {
     if(path[1] == NULL)
     {
@@ -20,6 +21,25 @@ void cd(char **path)
         {
             perror("Error");
         }
+    }
+
+    else if(!strcmp(path[1], "-"))
+    {
+        if(prevset)
+        {
+            if(chdir(prev) != 0)
+            {
+                perror("Error");
+            }
+
+            pwd();
+        }
+
+        else
+        {
+            printf("Error: No previous directory set yet\n");
+        }
+        
     }
 
     else

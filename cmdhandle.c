@@ -5,17 +5,18 @@
 #include "ls.h"
 #include "pinfo.h"
 #include "echo.h"
+#include "env.h"
+#include "jobs.h"
+#include "bg.h"
+#include "fg.h"
+#include "overkill.h"
+#include "kjob.h"
+#include "sighandle.h"
+#include "main.h"
 
-int cmdhandle(char **parsed)
+int cmdhandle(char **parsed, int args)
 {
-    if(!strcmp(parsed[0], "quit"))
-    {
-        printf("You have exited the shell.\n");
-        exit(0);
-        return 1;
-    }
-
-    else if(!strcmp(parsed[0], "pwd"))
+    if(!strcmp(parsed[0], "pwd"))
     {
         pwd();
         return 0;
@@ -23,13 +24,12 @@ int cmdhandle(char **parsed)
 
     else if(!strcmp(parsed[0], "cd"))
     {
-        cd(parsed);
         return 0;
     }
 
     else if(!strcmp(parsed[0], "echo"))
     {
-        echo(parsed);
+        echo(parsed, args);
         return 0;
     }
 
@@ -45,6 +45,48 @@ int cmdhandle(char **parsed)
         return 0;
     }
 
+    else if(!strcmp(parsed[0], "setenv"))
+    {
+        setEnv(parsed, args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "unsetenv"))
+    {
+        unsetEnv(parsed, args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "jobs"))
+    {
+        jobs(args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "kjob"))
+    {
+        kjob(parsed, args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "overkill"))
+    {
+        overkill(args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "fg"))
+    {
+        fg(parsed, args);
+        return 0;
+    }
+
+    else if(!strcmp(parsed[0], "bg"))
+    {
+        bg(parsed, args);
+        return 0;
+    }
+
     else if(!strcmp(parsed[0], "clear"))
     {
         printf("\e[1;1H\e[2J");
@@ -53,6 +95,6 @@ int cmdhandle(char **parsed)
 
     else
     {
-        return 2;
+        return 1;
     }
 }
